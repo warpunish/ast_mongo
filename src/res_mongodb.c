@@ -70,8 +70,30 @@ typedef struct {
 // 0 = disable monitoring, 0 != enable monitoring
 static unsigned apm_command_monitoring = 0;
 static unsigned apm_sdam_monitoring = 0;
-// 0 = MONGOC_LOG_LEVEL_ERROR,..., 6 = MONGOC_LOG_LEVEL_TRACE
-static unsigned apm_log_level = MONGOC_LOG_LEVEL_ERROR;
+// -1 = disable
+// 0 = MONGOC_LOG_LEVEL_ERROR
+// ,...,
+// 6 = MONGOC_LOG_LEVEL_TRACE
+static int mongoc_log_level = -1;
+
+static int log_level_mongoc2ast(mongoc_log_level_t mongoc_level) {
+    switch(mongoc_level) {
+        case MONGOC_LOG_LEVEL_ERROR:
+            return __LOG_ERROR;
+        case MONGOC_LOG_LEVEL_CRITICAL:
+        case MONGOC_LOG_LEVEL_WARNING:
+            return __LOG_WARNING;
+        case MONGOC_LOG_LEVEL_MESSAGE:
+        case MONGOC_LOG_LEVEL_INFO:
+            return __LOG_NOTICE;
+        case MONGOC_LOG_LEVEL_DEBUG:
+            return __LOG_DEBUG;
+        case MONGOC_LOG_LEVEL_TRACE:
+            return __LOG_VERBOSE;
+        default:
+            return __LOG_ERROR;
+    }
+}
 
 static void mongoc_log_handler(mongoc_log_level_t log_level,
            const char *log_domain,
@@ -79,8 +101,8 @@ static void mongoc_log_handler(mongoc_log_level_t log_level,
            void *user_data)
 {
    /* smaller values are more important */
-   if (log_level <= apm_log_level) {
-      mongoc_log_default_handler(log_level, log_domain, message, user_data);
+   if (log_level <= mongoc_log_level) {
+       ast_log(log_level_mongoc2ast(log_level), log_domain, 0, "ast_mongo", "%s\n", message);
    }
 }
 
@@ -348,7 +370,6 @@ static int config(int reload)
         cfg = ast_config_load(CONFIG_FILE, config_flags);
         if (!cfg || cfg == CONFIG_STATUS_FILEINVALID) {
             ast_log(LOG_WARNING, "unable to load config %s\n", CONFIG_FILE);
-            res = AST_MODULE_LOAD_DECLINE;
             break;
         }
         else if (cfg == CONFIG_STATUS_FILEUNCHANGED)
@@ -357,10 +378,10 @@ static int config(int reload)
         if (!(var = ast_variable_browse(cfg, CATEGORY)))
             break;
 
-        if ((tmp = ast_variable_retrieve(cfg, CATEGORY, "apm_log_level"))
-        && (sscanf(tmp, "%u", &apm_log_level) != 1)) {
-           ast_log(LOG_WARNING, "apm_log_level must be a 0..6, not '%s'\n", tmp);
-           apm_log_level = MONGOC_LOG_LEVEL_ERROR;
+        if ((tmp = ast_variable_retrieve(cfg, CATEGORY, "mongoc_log_level"))
+        && (sscanf(tmp, "%u", &mongoc_log_level) != 1)) {
+           ast_log(LOG_WARNING, "mongoc_log_level must be a 0..6, not '%s'\n", tmp);
+           mongoc_log_level = MONGOC_LOG_LEVEL_ERROR;
         }
         if ((tmp = ast_variable_retrieve(cfg, CATEGORY, "apm_command_monitoring"))
         && (sscanf(tmp, "%u", &apm_command_monitoring) != 1)) {
@@ -382,13 +403,18 @@ static int config(int reload)
 
 static int reload(void)
 {
-    ast_log(LOG_NOTICE, "reloding...\n");
-    return config(1);
+    int res;
+    ast_log(LOG_DEBUG, "reloding...\n");
+    mongoc_log_set_handler(NULL, NULL);
+    res = config(1);
+    mongoc_log_set_handler(mongoc_log_handler, NULL);
+    return res;
 }
 
 static int unload_module(void)
 {
     ast_log(LOG_DEBUG, "unloading...\n");
+    mongoc_log_set_handler(NULL, NULL);
     mongoc_cleanup();
     return 0;
 }
@@ -410,7 +436,6 @@ static int load_module(void)
         return AST_MODULE_LOAD_DECLINE;
     mongoc_init();
     mongoc_log_set_handler(mongoc_log_handler, NULL);
-    mongoc_log_trace_enable();
     return 0;
 }
 
