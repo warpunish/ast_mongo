@@ -134,19 +134,6 @@ $SUDO ldconfig
 $SUDO make config
 ## set up asterisk for test environment
 cd /etc/asterisk
-$SUDO ln -s $MOUNT_POINT/configs/asterisk.conf
-$SUDO ln -s $MOUNT_POINT/configs/modules.conf
-$SUDO ln -s $MOUNT_POINT/configs/logger.conf
-$SUDO ln -s $MOUNT_POINT/configs/sorcery.conf
-$SUDO ln -s $MOUNT_POINT/configs/extconfig.conf
-$SUDO ln -s $MOUNT_POINT/configs/cdr_mongodb.conf
-$SUDO ln -s $MOUNT_POINT/configs/cel_mongodb.conf
-$SUDO ln -s $MOUNT_POINT/configs/res_config_mongodb.conf
-$SUDO ln -s $MOUNT_POINT/configs/cdr.conf
-$SUDO ln -s $MOUNT_POINT/configs/cel.conf
-$SUDO ln -s $MOUNT_POINT/configs/rtp.conf
-$SUDO ln -s $MOUNT_POINT/configs/http.conf
-$SUDO ln -s $MOUNT_POINT/configs/ari.conf
 $SUDO touch acl.conf
 $SUDO touch features.conf
 $SUDO touch pjproject.conf
