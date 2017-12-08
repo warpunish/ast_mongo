@@ -13,13 +13,8 @@
  *
  */
 
-/*! \li \ref res_mongodb.c uses the configuration file \ref res_mongodb.conf
+/*! \li \ref res_mongodb.c uses the configuration file \ref ast_mongo.conf
  * \addtogroup configuration_file Configuration Files
- */
-
-/*! 
- * \page res_mongodb.conf res_mongodb.conf
- * \verbinclude res_mongodb.conf.sample
  */
 
 /*** MODULEINFO
@@ -40,22 +35,12 @@ ASTERISK_REGISTER_FILE()
 /*** DOCUMENTATION
     <function name="MongoDB" language="en_US">
         <synopsis>
-            MongoDB Common Resources
+            ast_mongo common resource
         </synopsis>
-        <syntax>
-            <parameter name="property" required="true">
-                <enumlist>
-                    <enum name="transaction">
-                        <para>Gets or sets the active transaction ID.  If set, and the transaction ID does not
-                        exist and a <replaceable>database name</replaceable> is specified as an argument, it will be created.</para>
-                    </enum>
-                </enumlist>
-            </parameter>
-            <parameter name="argument" required="false" />
-        </syntax>
         <description>
-            <para>The MongoDB() function allows setting several properties to influence how a connected
-            database processes transactions.</para>
+            This is the ast_mongo common resource which provides;
+            1. functions to init and clean up mongoDB C Driver,
+            2. handlers for Application Performance Monitoring (APM).
         </description>
     </function>
  ***/
@@ -80,8 +65,8 @@ static int unload_module(void)
  * Module loading including tests for configuration or dependencies.
  * This function can return AST_MODULE_LOAD_FAILURE, AST_MODULE_LOAD_DECLINE,
  * or AST_MODULE_LOAD_SUCCESS. If a dependency or environment variable fails
- * tests return AST_MODULE_LOAD_FAILURE. If the module can not load the 
- * configuration file or other non-critical problem return 
+ * tests return AST_MODULE_LOAD_FAILURE. If the module can not load the
+ * configuration file or other non-critical problem return
  * AST_MODULE_LOAD_DECLINE. On success return AST_MODULE_LOAD_SUCCESS.
  */
 static int load_module(void)
