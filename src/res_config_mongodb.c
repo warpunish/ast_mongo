@@ -15,7 +15,7 @@
  * \ingroup resources
  *
  * Depends on the MongoDB library - https://www.mongodb.org
- * 
+ *
  */
 
 /*! \li \ref res_config_mongodb.c uses the configuration file \ref res_config_mongodb.conf
@@ -70,9 +70,9 @@ static int str_split(char* str, const char* delim, const char* tokens[] ) {
     char* saveptr;
     int count = 0;
 
-    for(token = strtok_r(str, delim, &saveptr); 
-        token && count < MAXTOKENS; 
-        token = strtok_r(NULL, delim, &saveptr), count++) 
+    for(token = strtok_r(str, delim, &saveptr);
+        token && count < MAXTOKENS;
+        token = strtok_r(NULL, delim, &saveptr), count++)
     {
         tokens[count] = token;
     }
@@ -89,9 +89,11 @@ static const char *key_asterisk2mongo(const char *key)
     return strcmp(key, "id") == 0 ? "_id" : key;
 }
 
-/*! 
+/*!
  *  check if the specified string is integer
  *
+ *  \param[in] value
+ *  \param[out] result
  *  \retval true if it's an integer
  */
 static int is_integer(const char* pstr)
@@ -100,10 +102,10 @@ static int is_integer(const char* pstr)
     return span && pstr[span] == '\0';
 }
 
-/*! 
+/*!
  *  assume the specified src doesn't have any escaping letters for mongo such as \, ', ".
  *
- *  \retval a pointer same as dst. 
+ *  \retval a pointer same as dst.
  */
 static const char* strcopy(const char* src, char* dst, int size)
 {
@@ -132,7 +134,7 @@ static const char* strcopy(const char* src, char* dst, int size)
     return (const char*)dst;
 }
 
-/*! 
+/*!
  * \brief   make a condition to query
  * \param   sql     is pattern for sql
  * \retval  a bson to query as follows;
@@ -234,8 +236,8 @@ static bson_t *make_query(const struct ast_variable *fields, const char *orderby
                     else if (!strcasecmp(tokens[1], "!=")) {
                         // {
                         //     tokens[0]: {
-                        //         "$exists" : true, 
-                        //         "$ne" : value 
+                        //         "$exists" : true,
+                        //         "$ne" : value
                         //     }
                         // }
                         condition = BCON_NEW(
@@ -246,7 +248,7 @@ static bson_t *make_query(const struct ast_variable *fields, const char *orderby
                     else if (!strcasecmp(tokens[1], ">")) {
                         // {
                         //     tokens[0]: {
-                        //         "$gt" : value 
+                        //         "$gt" : value
                         //     }
                         // }
                         if (is_integer(fields->value)) {
@@ -260,7 +262,7 @@ static bson_t *make_query(const struct ast_variable *fields, const char *orderby
                     else if (!strcasecmp(tokens[1], "<=")) {
                         // {
                         //     tokens[0]: {
-                        //         "$lte" : value 
+                        //         "$lte" : value
                         //     }
                         // }
                         if (is_integer(fields->value)) {
@@ -297,7 +299,7 @@ static bson_t *make_query(const struct ast_variable *fields, const char *orderby
             ast_log(LOG_ERROR, "something wrong.\n");
             break;
         }
-        root = BCON_NEW("$query", BCON_DOCUMENT(query), 
+        root = BCON_NEW("$query", BCON_DOCUMENT(query),
                         "$orderby", BCON_DOCUMENT(order));
         if (!root) {    // current BCON_NEW might not return any error such as NULL...
             ast_log(LOG_WARNING, "not enough memory\n");
@@ -374,7 +376,7 @@ static void model_register(const char *collection, const bson_t *model)
     ast_mutex_unlock(&model_lock);
 }
 
-static bson_type_t rtype2btype (require_type rtype) 
+static bson_type_t rtype2btype (require_type rtype)
 {
     bson_type_t btype;
     switch(rtype) {
@@ -504,7 +506,7 @@ static struct ast_variable *realtime(const char *database, const char *table, co
                     prev->next = ast_variable_new(key, value, "");
                     if (prev->next)
                         prev = prev->next;
-                } 
+                }
                 else
                     prev = var = ast_variable_new(key, value, "");
             }
@@ -530,7 +532,7 @@ static struct ast_variable *realtime(const char *database, const char *table, co
  * \param fields    is a list containing one or more field/operator/value set.
  *
  * Select database and preform query on table, prepare the sql statement
- * Sub-in the values to the prepared statement and execute it. 
+ * Sub-in the values to the prepared statement and execute it.
  * Execute this prepared query against MongoDB.
  * Return results as an ast_config variable.
  *
@@ -706,7 +708,7 @@ static int update(const char *database, const char *table, const char *keyfield,
     if(dbclient == NULL) {
         ast_log(LOG_ERROR, "no client allocated\n");
         return -1;
-    }    
+    }
 
     do {
         bson_error_t error;
@@ -799,7 +801,7 @@ static int require(const char *database, const char *table, va_list ap)
 
     while ((elm = va_arg(ap, char *))) {
         int type = va_arg(ap, require_type);
-        // int size = 
+        // int size =
         va_arg(ap, int);
         // ast_log(LOG_DEBUG, "elm=%s, type=%d, size=%d\n", elm, type, size);
         BSON_APPEND_INT64(model, elm, rtype2btype(type));
@@ -970,7 +972,7 @@ static struct ast_config *load(
             category = bson_iter_utf8(&iter, &length);
             if (!category) {
                 ast_log(LOG_ERROR, "cannot read category.\n");
-                break;                
+                break;
             }
 
             if(!bson_iter_find(&iter, "var_name")) {
@@ -980,7 +982,7 @@ static struct ast_config *load(
             var_name = bson_iter_utf8(&iter, &length);
             if (!var_name) {
                 ast_log(LOG_ERROR, "cannot read var_name.\n");
-                break;                
+                break;
             }
 
             if(!bson_iter_find(&iter, "var_val")) {
@@ -990,7 +992,7 @@ static struct ast_config *load(
             var_val = bson_iter_utf8(&iter, &length);
             if (!var_val) {
                 ast_log(LOG_ERROR, "cannot read var_val.\n");
-                break;                
+                break;
             }
 
             if (!strcmp (var_val, "#include")) {
@@ -1000,7 +1002,7 @@ static struct ast_config *load(
                 }
                 ast_log(LOG_DEBUG, "#include ignored, who_asked=%s\n", who_asked);
                 continue;
-            } 
+            }
 
             if (strcmp(last_category, category) || last_cat_metric != cat_metric) {
                 cur_cat = ast_category_new(category, "", 99999);
@@ -1036,7 +1038,7 @@ static struct ast_config *load(
     return cfg;
 }
 
-/*! 
+/*!
  * \brief Callback for clearing any cached info
  * \note We don't currently cache anything
  * \retval 0 If any cache was purged
