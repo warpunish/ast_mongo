@@ -64,6 +64,7 @@ AST_MUTEX_DEFINE_STATIC(model_lock);
 static mongoc_client_pool_t* dbpool = NULL;
 static bson_t* models = NULL;
 static bson_oid_t *serverid = NULL;
+static void* apm_context = NULL;
 
 static int str_split(char* str, const char* delim, const char* tokens[] ) {
     char* token;
@@ -1094,6 +1095,7 @@ static int config(int reload)
             ast_log(LOG_ERROR, "cannot make a connection pool for MongoDB\n");
             break;
         }
+        apm_context = ast_mongo_apm_start(dbpool);
 
         if ((tmp = ast_variable_retrieve(cfg, CATEGORY, SERVERID)) != NULL) {
             if (!bson_oid_is_valid (tmp, strlen(tmp))) {
@@ -1139,7 +1141,10 @@ static int unload_module(void)
 {
     ast_config_engine_deregister(&mongodb_engine);
     if (models)
-       bson_destroy(models);
+        bson_destroy(models);
+    if (apm_context)
+        ast_mongo_apm_stop(apm_context);
+    ast_log(LOG_DEBUG, "unloaded.\n");
     return 0;
 }
 
