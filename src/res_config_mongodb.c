@@ -1459,6 +1459,8 @@ static int unload_module(void)
         bson_destroy(models);
     if (apm_context)
         ast_mongo_apm_stop(apm_context);
+    if (dbpool)
+        mongoc_client_pool_destroy(dbpool);
     ast_log(LOG_DEBUG, "unloaded.\n");
     return 0;
 }
