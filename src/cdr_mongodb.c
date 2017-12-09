@@ -61,6 +61,8 @@ static char *dbname = NULL;
 static char *dbcollection = NULL;
 static mongoc_client_pool_t *dbpool = NULL;
 static bson_oid_t *serverid = NULL;
+static void* apm_context = NULL;
+static int apm_enabled = 0;
 
 static int mongodb_log(struct ast_cdr *cdr)
 {
@@ -212,6 +214,15 @@ static int mongodb_load_module(int reload)
             bson_oid_init_from_string(serverid, tmp);
         }
 
+        if ((tmp = ast_variable_retrieve(cfg, CATEGORY, "apm"))
+        && (sscanf(tmp, "%u", &apm_enabled) != 1)) {
+           ast_log(LOG_WARNING, "apm must be a 0|1, not '%s'\n", tmp);
+           apm_enabled = 0;
+        }
+ast_log(LOG_ERROR, "mkmk apm_enabled=%u\n", apm_enabled);
+        if (apm_context)
+            ast_mongo_apm_stop(apm_context);
+
         if (dbpool)
             mongoc_client_pool_destroy(dbpool);
         dbpool = mongoc_client_pool_new(uri);
@@ -219,6 +230,9 @@ static int mongodb_load_module(int reload)
             ast_log(LOG_ERROR, "cannot make a connection pool for MongoDB\n");
             break;
         }
+
+        if (apm_enabled)
+            apm_context = ast_mongo_apm_start(dbpool);
 
         res = 0; // suceess
     } while (0);
@@ -249,6 +263,8 @@ static int unload_module(void)
         ast_free(dbname);
     if (dbcollection)
         ast_free(dbcollection);
+    if (apm_context)
+        ast_mongo_apm_stop(apm_context);
     if (dbpool)
         mongoc_client_pool_destroy(dbpool);
     return 0;

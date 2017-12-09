@@ -65,6 +65,7 @@ static mongoc_client_pool_t* dbpool = NULL;
 static bson_t* models = NULL;
 static bson_oid_t *serverid = NULL;
 static void* apm_context = NULL;
+static int apm_enabled = 0;
 
 static int str_split(char* str, const char* delim, const char* tokens[] ) {
     char* token;
@@ -1391,6 +1392,15 @@ static int config(int reload)
             ast_log(LOG_ERROR, "parsing uri error, %s\n", tmp);
             break;
         }
+
+        if ((tmp = ast_variable_retrieve(cfg, CATEGORY, "apm"))
+        && (sscanf(tmp, "%u", &apm_enabled) != 1)) {
+           ast_log(LOG_WARNING, "apm must be a 0|1, not '%s'\n", tmp);
+           apm_enabled = 0;
+        }
+        if (apm_context)
+            ast_mongo_apm_stop(apm_context);
+
         if (dbpool)
             mongoc_client_pool_destroy(dbpool);
         dbpool = mongoc_client_pool_new(uri);
@@ -1398,7 +1408,9 @@ static int config(int reload)
             ast_log(LOG_ERROR, "cannot make a connection pool for MongoDB\n");
             break;
         }
-        apm_context = ast_mongo_apm_start(dbpool);
+
+        if (apm_enabled)
+            apm_context = ast_mongo_apm_start(dbpool);
 
         if ((tmp = ast_variable_retrieve(cfg, CATEGORY, SERVERID)) != NULL) {
             if (!bson_oid_is_valid (tmp, strlen(tmp))) {
