@@ -48,7 +48,7 @@ Name of DB |Name of Collection |Comment
 `cel`      | `cel`
 
 ### Config files for the exmaple
-
+- *CHANGE@v0.3*: The three config files `res_config_mongodb.conf`, `cdr_mongodb.conf` and `cel_mongodb.conf` have compiled into one `ast_mongo.conf`.
 - [`ast_mongo.conf`](test_bench/configs/ast_mongo.conf) for ast_mongo plugins;
 
         ;==========================================
