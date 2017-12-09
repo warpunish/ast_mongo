@@ -219,7 +219,7 @@ static int mongodb_load_module(int reload)
            ast_log(LOG_WARNING, "apm must be a 0|1, not '%s'\n", tmp);
            apm_enabled = 0;
         }
-ast_log(LOG_ERROR, "mkmk apm_enabled=%u\n", apm_enabled);
+
         if (apm_context)
             ast_mongo_apm_stop(apm_context);
 
