@@ -1,7 +1,5 @@
 {
   "mongo_c_driver": "1.8.2",
   "pjsip": "2.5",
-  "asterisk": "15.1.3",
-  "mongodb": "3.4",
-  "nodejs": "4.x"
+  "asterisk": "15.1.3"
 }
