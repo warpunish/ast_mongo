@@ -38,7 +38,7 @@ $SUDO make install
 #
 #   Install pjsip library                   http://www.pjsip.org/download.htm
 #
-if [ $VERSION_PJSIP \< "2.5" ] ; then
+if [ "$VERSION_PJSIP" != "bundled" ] ; then
     cd $HOME
     wget -nv "http://www.pjsip.org/release/$VERSION_PJSIP/pjproject-$VERSION_PJSIP.tar.bz2" -O - | tar xjf -
     cd pjproject-$VERSION_PJSIP

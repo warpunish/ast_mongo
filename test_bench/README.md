@@ -150,9 +150,8 @@ You can specify versions of some essential libraries to build to a [`config.json
 Property             |Definition           | Comments
 ---------------------|---------------------|----------
 `mongo_c_driver` |version of the [mongo c driver][3] |
-`pjsip`          |version of the [pjsip][4] | note: use the pjsip bundled with asterisk if you specify '2.5' or later.
+`pjsip`          |version of the [pjsip][4] | specify "bundled" if you want to use the pjsip with `--with-pjproject-bundled`.
 `asterisk`       |version of [Asterisk][1]  |
-`mongodb`        |version of the module| deprecated
 
 ## Requirements
 
