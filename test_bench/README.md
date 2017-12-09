@@ -37,9 +37,9 @@ Network name | Description
 
 Container Name   | Base Image | The related script | comment
 -----------------|------------|--------------------|--------
-`asterisk.local`        | [ubuntu:xenial](https://hub.docker.com/_/ubuntu/) | [./asterisk/asterisk](asterisk/asterisk)
+`asterisk.local`        | [ubuntu:xenial](https://hub.docker.com/_/ubuntu/) | [./asterisk/asterisk](asterisk/asterisk) |
 `ast_mongo[1..3].local` | [mongo](https://hub.docker.com/_/mongo/)          | [./mongodb/mongors](mongodb/mongors) | constructs a replica set '`ast_mongo_set`'.
-`tester.local`          | [node:boron](https://hub.docker.com/_/node/)      | [./tester/tester](tester/tester)
+`tester.local`          | [node:carbon](https://hub.docker.com/_/node/)      | [./tester/tester](tester/tester) |
 
 ## Test Command
 
