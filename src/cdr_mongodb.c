@@ -45,12 +45,12 @@ ASTERISK_REGISTER_FILE()
 #include "asterisk/res_mongodb.h"
 
 static const char NAME[] = "cdr_mongodb";
-static const char CATEGORY[] = "mongodb";
+static const char CATEGORY[] = "cdr";
 static const char URI[] = "uri";
 static const char DATABSE[] = "database";
 static const char COLLECTION[] = "collection";
 static const char SERVERID[] = "serverid";
-static const char CONFIG_FILE[] = "cdr_mongodb.conf";
+static const char CONFIG_FILE[] = "ast_mongo.conf";
 
 enum {
     CONFIG_REGISTERED = 1 << 0,

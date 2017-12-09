@@ -58,12 +58,12 @@ ASTERISK_REGISTER_FILE()
 // #define DATE_FORMAT "%Y-%m-%d %T.%6q"
 
 static const char NAME[] = "cel_mongodb";
-static const char CATEGORY[] = "mongodb";
+static const char CATEGORY[] = "cel";
 static const char URI[] = "uri";
 static const char DATABSE[] = "database";
 static const char COLLECTION[] = "collection";
 static const char SERVERID[] = "serverid";
-static const char CONFIG_FILE[] = "cel_mongodb.conf";
+static const char CONFIG_FILE[] = "ast_mongo.conf";
 
 enum {
     CONFIG_REGISTERED = 1 << 0,

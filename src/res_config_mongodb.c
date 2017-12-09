@@ -56,8 +56,8 @@ ASTERISK_REGISTER_FILE()
 
 static const int MAXTOKENS = 3;
 static const char NAME[] = "mongodb";
-static const char CATEGORY[] = "mongodb";
-static const char CONFIG_FILE[] = "res_config_mongodb.conf";
+static const char CATEGORY[] = "config";
+static const char CONFIG_FILE[] = "ast_mongo.conf";
 static const char SERVERID[] = "serverid";
 
 AST_MUTEX_DEFINE_STATIC(model_lock);
