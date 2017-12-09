@@ -81,6 +81,10 @@ Name of DB |Name of Collection |Comment
         ;
         [config]
         uri=mongodb://mongodb.local/asterisk    ; location of database
+        ;------------------------------------------
+        ; 0 != enable APM
+        ; default is disabled (0)
+        ;apm=0
         ;==========================================
         ;
         ; for CDR plugin
@@ -89,6 +93,10 @@ Name of DB |Name of Collection |Comment
         uri=mongodb://mongodb.local/cdr ; location of database
         database=cdr                    ; name of database
         collection=cdr                  ; name of collection to record cdr data
+        ;------------------------------------------
+        ; 0 != enable APM
+        ; default is disabled (0)
+        ;apm=0
         ;==========================================
         ;
         ; for CEL plugin
@@ -97,6 +105,10 @@ Name of DB |Name of Collection |Comment
         uri=mongodb://mongodb.local/cel ; location of database
         database=cel                    ; name of database
         collection=cel                  ; name of collection to record cel data
+        ;------------------------------------------
+        ; 0 != enable APM
+        ; default is disabled (0)
+        ;apm=0
 
 - [`sorcery.conf`](test_bench/configs/sorcery.conf) specifies map from asterisk's resources to database's collections.
 
