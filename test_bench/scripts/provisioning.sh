@@ -133,17 +133,32 @@ $SUDO ldconfig
 # make it as daemon
 $SUDO make config
 ## set up asterisk for test environment
-cd /etc/asterisk
-$SUDO touch acl.conf
-$SUDO touch features.conf
-$SUDO touch pjproject.conf
-$SUDO touch pjsip_notify.conf
-$SUDO touch pjsip_wizard.conf
-$SUDO touch res_config_sqlite3.conf
-$SUDO touch res_parking.conf
-$SUDO touch statsd.conf
-$SUDO touch udptl.conf
-
+for conf in \
+    acl.conf \
+    features.conf \
+    pjproject.conf \
+    pjsip_notify.conf \
+    pjsip_wizard.conf \
+    res_config_sqlite3.conf \
+    res_parking.conf \
+    statsd.conf \
+    udptl.conf \
+    calendar.conf
+do
+    $SUDO touch /etc/asterisk/$conf
+done
+for conf in \
+    features.conf \
+    indications.conf \
+    res_stun_monitor.conf \
+    phoneprov.conf \
+    cli_aliases.conf \
+    users.conf \
+    ccss.conf \
+    hep.conf
+do
+    $SUDO cp configs/samples/$conf.sample /etc/asterisk/$conf
+done
 #
 #
 #
