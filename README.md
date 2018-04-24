@@ -1,4 +1,6 @@
 # MongoDB Plugins for Asterisk
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwarpunish%2Fast_mongo.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwarpunish%2Fast_mongo?ref=badge_shield)
+
 
 The **`ast_mongo`** project provides the following plugins for Asterisk;
 
@@ -108,3 +110,6 @@ Name of DB |Name of Collection |Comment
 [5]: https://wiki.asterisk.org/wiki/display/AST/Setting+up+PJSIP+Realtime
 [6]: https://github.com/minoruta/ast_mongo/tree/master/asterisk
 [9]: https://github.com/viktike
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwarpunish%2Fast_mongo.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwarpunish%2Fast_mongo?ref=badge_large)
